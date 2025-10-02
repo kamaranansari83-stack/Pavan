@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HACKING SYSTEM</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Courier New', monospace;
+        }
+        
+        body {
+            background-color: #000;
+            color: #0f0;
+            overflow: hidden;
+            height: 100vh;
+            position: relative;
+        }
+        
+        .container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+        
+        .main-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #000;
+            z-index: 5;
+            transition: opacity 0.5s ease;
+        }
+        
+        .hacking-screen {
+            display: none;
+            flex-direction: column;
+            width: 100%;
+            height: 100%;
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #000;
+            z-index: 20;
+            overflow: hidden;
+        }
+        
+        .matrix-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            opacity: 0.7;
+        }
+        
+        .hacking-content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .hacking-header {
+            text-align: center;
+            padding: 10px 0;
+            color: #f00;
+            font-size: 24px;
+            text-shadow: 0 0 10px #f00;
+            animation: blink 1s infinite;
+        }
+        
+        .hacking-info {
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid #0f0;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 16px;
+            max-height: 40vh;
+            overflow-y: auto;
+        }
+        
+        .countdown {
+            text-align: center;
+            font-size: 48px;
+            color: #f00;
+            margin: 20px 0;
+            text-shadow: 0 0 10px #f00;
+        }
+        
+        .location-tracking {
+            padding: 15px;
+            background-color: rgba(0, 0, 0, 0.7);
+            border: 1px solid #f00;
+            border-radius: 5px;
+            margin: 10px 0;
+            font-size: 16px;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            margin: 10px 0;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background-color: #f00;
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            background-color: #f00;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 18px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
+        }
+        
+        .btn:hover {
+            background-color: #900;
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.8);
+        }
+        
+        .btn:active {
+            transform: scale(0.95);
+        }
+        
+        .friendship-animation {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        
+        .heart {
+            font-size: 60px;
+            color: #f00;
+            cursor: pointer;
+            animation: pulse 1.5s infinite;
+            margin: 20px 0;
+        }
+        
+        .message {
+            font-size: 24px;
+            color: #0f0;
+            text-align: center;
+            margin: 10px 0;
+            animation: glow 2s infinite alternate;
+        }
+        
+        .flash-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            animation: flash 5s infinite;
+            pointer-events: none;
+        }
+        
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #0f0; }
+            to { text-shadow: 0 0 20px #0f0, 0 0 30px #0f0; }
+        }
+        
+        @keyframes flash {
+            0%, 100% { background-color: #000; }
+            25% { background-color: rgba(255, 0, 0, 0.1); }
+            50% { background-color: #000; }
+            75% { background-color: rgba(0, 0, 0, 0.8); }
+        }
+        
+        .hacker-text {
+            color: #f00;
+            font-weight: bold;
+        }
+        
+        .hindi-text {
+            color: #0f0;
+            font-weight: bold;
+        }
+        
+        .terminal-text {
+            color: #0f0;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .warning-text {
+            color: #f00;
+            font-size: 18px;
+            text-align: center;
+            margin: 10px 0;
+            animation: blink 1s infinite;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .visible {
+            display: flex;
+        }
+        
+        @media (max-width: 768px) {
+            .hacking-header {
+                font-size: 18px;
+            }
+            
+            .hacking-info, .location-tracking {
+                font-size: 14px;
+            }
+            
+            .countdown {
+                font-size: 36px;
+            }
+            
+            .btn {
+                padding: 12px 24px;
+                font-size: 16px;
+            }
+            
+            .message {
+                font-size: 20px;
+            }
+            
+            .heart {
+                font-size: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="flash-bg"></div>
+    
+    <div class="container">
+        <div class="main-screen" id="mainScreen">
+            <div class="friendship-animation">
+                <div class="message">I LOVE Pawan</div>
+                <div class="heart" id="heartBtn">❤️</div>
+                <div class="message">Click on the heart to continue</div>
+            </div>
+        </div>
+        
+        <div class="hacking-screen" id="hackingScreen">
+            <canvas class="matrix-bg" id="matrixBg"></canvas>
+            
+            <div class="hacking-content">
+                <div class="hacking-header">SYSTEM BREACH DETECTED</div>
+                
+                <div class="hacking-info" id="hackingInfo">
+                    <div class="terminal-text">Initializing hack protocol...</div>
+                </div>
+                
+                <div class="location-tracking" id="locationTracking">
+                    <div class="terminal-text">Locating target...</div>
+                    <div class="progress-bar">
+                        <div class="progress" id="locationProgress"></div>
+                    </div>
+                </div>
+                
+                <div class="countdown" id="countdown">10</div>
+                
+                <div class="warning-text">
+                    <span class="hacker-text">WARNING:</span> <span class="hindi-text">सिस्टम हैक हो रहा है!</span>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress" id="hackProgress"></div>
+                </div>
+                
+                <button class="btn" id="stopBtn">ABORT HACK</button>
+            </div>
+        </div>
+    </div>
+    
+    <audio id="ringtone" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmFgU7k9n1unEiBC13yO/eizEIHWq+8+OWT" type="audio/wav">
+    </audio>
+    
+    <audio id="alertSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmFgU7k9n1unEiBC13yO/eizEIHWq+8+OWT" type="audio/wav">
+    </audio>
+    
+    <audio id="beepSound" preload="auto">
+        <source src="data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVgodDbq2EcBj+a2/LDciUFLIHO8tiJNwgZaLvt559NEAxQp+PwtmMcBjiR1/LMeSwFJHfH8N2QQAoUXrTp66hVFApGn+DyvmwhBSuBzvLZiTYIG2m98OScTgwOUarm7blmFgU7k9n1unEiBC13yO/eizEIHWq+8+OWT" type="audio/wav">
+    </audio>
+
+    <script>
+        // Matrix background effect
+        const canvas = document.getElementById('matrixBg');
+        const ctx = canvas.getContext('2d');
+        
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const matrix = "ABCDEFGHIJKLMNOPQRSTUVWXYZ123456789@#$%^&*()*&^%+-/~{[|`]}";
+        const matrixArray = matrix.split("");
+        
+        const fontSize = 10;
+        const columns = canvas.width / fontSize;
+        
+        const drops = [];
+        for(let x = 0; x < columns; x++) {
+            drops[x] = 1;
+        }
+        
+        function drawMatrix() {
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.04)';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            ctx.fillStyle = '#0F0';
+            ctx.font = fontSize + 'px monospace';
+            
+            for(let i = 0; i < drops.length; i++) {
+                const text = matrixArray[Math.floor(Math.random() * matrixArray.length)];
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                
+                if(drops[i] * fontSize > canvas.height && Math.random() > 0.975) {
+                    drops[i] = 0;
+                }
+                
+                drops[i]++;
+            }
+        }
+        
+        // Main screen to hacking screen transition
+        const heartBtn = document.getElementById('heartBtn');
+        const mainScreen = document.getElementById('mainScreen');
+        const hackingScreen = document.getElementById('hackingScreen');
+        const stopBtn = document.getElementById('stopBtn');
+        
+        heartBtn.addEventListener('click', function() {
+            mainScreen.style.display = 'none';
+            hackingScreen.style.display = 'flex';
+            startHacking();
+            playSound('beepSound');
+        });
+        
+        stopBtn.addEventListener('click', function() {
+            resetHacking();
+        });
+        
+        // Hacking simulation
+        let hackInterval;
+        let countdownInterval;
+        let locationInterval;
+        let hackProgress = 0;
+        let locationProgress = 0;
+        let countdownValue = 10;
+        
+        const hackingMessages = [
+            { en: "Bypassing firewall...", hi: "फ़ायरवॉल को बायपास कर रहा है..." },
+            { en: "Accessing main database...", hi: "मुख्य डेटाबेस तक पहुंच रहा है..." },
+            { en: "Decrypting files...", hi: "फ़ाइलों को डिक्रिप्ट कर रहा है..." },
+            { en: "Uploading virus...", hi: "वायरस अपलोड कर रहा है..." },
+            { en: "Stealing data...", hi: "डेटा चुरा रहा है..." },
+            { en: "System compromised!", hi: "सिस्टम समझौता कर लिया गया!" }
+        ];
+        
+        const locationMessages = [
+            { en: "Locating IP address...", hi: "आईपी पता लगा रहा है..." },
+            { en: "Tracking GPS coordinates...", hi: "जीपीएस निर्देशांक ट्रैक कर रहा है..." },
+            { en: "Accessing camera...", hi: "कैमरे तक पहुंच रहा है..." },
+            { en: "Location found!", hi: "स्थान मिल गया!" }
+        ];
+        
+        function startHacking() {
+            // Start matrix animation
+            const matrixInterval = setInterval(drawMatrix, 35);
+            
+            // Start hacking progress
+            hackInterval = setInterval(() => {
+                hackProgress += 5;
+                document.getElementById('hackProgress').style.width = hackProgress + '%';
+                
+                if (hackProgress % 15 === 0) {
+                    const randomMessage = hackingMessages[Math.floor(Math.random() * hackingMessages.length)];
+                    addHackingMessage(randomMessage.en, randomMessage.hi);
+                    playSound('beepSound');
+                }
+                
+                if (hackProgress >= 100) {
+                    clearInterval(hackInterval);
+                    playSound('alertSound');
+                    setTimeout(() => {
+                        playSound('ringtone');
+                    }, 1000);
+                }
+            }, 300);
+            
+            // Start location tracking
+            locationInterval = setInterval(() => {
+                locationProgress += 10;
+                document.getElementById('locationProgress').style.width = locationProgress + '%';
+                
+                if (locationProgress % 20 === 0) {
+                    const randomMessage = locationMessages[Math.floor(Math.random() * locationMessages.length)];
+                    updateLocationMessage(randomMessage.en, randomMessage.hi);
+                }
+                
+                if (locationProgress >= 100) {
+                    clearInterval(locationInterval);
+                }
+            }, 500);
+            
+            // Start countdown
+            countdownInterval = setInterval(() => {
+                countdownValue--;
+                document.getElementById('countdown').textContent = countdownValue;
+                
+                if (countdownValue <= 0) {
+                    clearInterval(countdownInterval);
+                    document.getElementById('countdown').textContent = "HACK COMPLETE!";
+                    playSound('alertSound');
+                }
+            }, 1000);
+        }
+        
+        function addHackingMessage(en, hi) {
+            const hackingInfo = document.getElementById('hackingInfo');
+            const messageDiv = document.createElement('div');
+            messageDiv.innerHTML = `<span class="hacker-text">${en}</span> | <span class="hindi-text">${hi}</span>`;
+            hackingInfo.appendChild(messageDiv);
+            hackingInfo.scrollTop = hackingInfo.scrollHeight;
+        }
+        
+        function updateLocationMessage(en, hi) {
+            const locationTracking = document.getElementById('locationTracking');
+            locationTracking.innerHTML = `
+                <div class="terminal-text"><span class="hacker-text">${en}</span> | <span class="hindi-text">${hi}</span></div>
+                <div class="progress-bar">
+                    <div class="progress" style="width: ${locationProgress}%"></div>
+                </div>
+            `;
+        }
+        
+        function resetHacking() {
+            clearInterval(hackInterval);
+            clearInterval(countdownInterval);
+            clearInterval(locationInterval);
+            
+            hackProgress = 0;
+            locationProgress = 0;
+            countdownValue = 10;
+            
+            document.getElementById('hackProgress').style.width = '0%';
+            document.getElementById('locationProgress').style.width = '0%';
+            document.getElementById('countdown').textContent = '10';
+            document.getElementById('hackingInfo').innerHTML = '<div class="terminal-text">Initializing hack protocol...</div>';
+            document.getElementById('locationTracking').innerHTML = '<div class="terminal-text">Locating target...</div><div class="progress-bar"><div class="progress" id="locationProgress"></div></div>';
+            
+            mainScreen.style.display = 'flex';
+            hackingScreen.style.display = 'none';
+        }
+        
+        function playSound(soundId) {
+            const sound = document.getElementById(soundId);
+            sound.currentTime = 0;
+            sound.play().catch(e => console.log("Audio play failed:", e));
+        }
+        
+        // Handle window resize
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        });
+    </script>
+</body>
+</html>
