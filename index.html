@@ -1,1 +1,422 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pawan - A Digital Portfolio</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        /* --- CSS Variables (Easy Customization) --- */
+        :root {
+            --primary-color: #007bff; /* A vibrant blue */
+            --secondary-color: #f8f9fa; /* Light grey */
+            --text-color: #343a40; /* Dark grey */
+            --accent-color: #ffc107; /* A cheerful yellow */
+            --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        /* --- Basic Reset & Body Styling --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-family);
+            line-height: 1.6;
+            background-color: #ffffff;
+            color: var(--text-color);
+        }
+
+        /* --- Header & Navigation --- */
+        .navbar {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            padding: 1rem 2rem;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .navbar .container {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .navbar .nav-links a {
+            color: var(--text-color);
+            text-decoration: none;
+            margin-left: 20px;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .navbar .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* --- Hero Section --- */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background: linear-gradient(rgba(0, 123, 255, 0.6), rgba(0, 123, 255, 0.2)), url('https://source.unsplash.com/random/1600x900/?wind,sky') no-repeat center center/cover;
+            color: white;
+            padding: 0 2rem;
+        }
+
+        .hero h1 {
+            font-size: 4rem;
+            margin-bottom: 0.5rem;
+            opacity: 0;
+            animation: fadeInDown 1s ease forwards;
+            animation-delay: 0.2s;
+        }
+
+        .hero p {
+            font-size: 1.5rem;
+            opacity: 0;
+            animation: fadeInUp 1s ease forwards;
+            animation-delay: 0.5s;
+        }
+
+        /* --- About Section (P-A-W-A-N) --- */
+        .about {
+            padding: 4rem 2rem;
+            background-color: var(--secondary-color);
+        }
+        .about .container {
+            max-width: 1100px;
+            margin: auto;
+            text-align: center;
+        }
+        .about h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+        .pawan-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+        }
+        .pawan-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+        .pawan-card.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .pawan-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .pawan-card .icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        .pawan-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        /* --- Skills Section --- */
+        .skills {
+            padding: 4rem 2rem;
+        }
+        .skills .container {
+            max-width: 1100px;
+            margin: auto;
+            text-align: center;
+        }
+        .skills h2 {
+            font-size: 2.5rem;
+            margin-bottom: 3rem;
+            color: var(--primary-color);
+        }
+        .skill-bars {
+            max-width: 700px;
+            margin: auto;
+        }
+        .skill-bar {
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        .skill-bar h4 {
+            margin-bottom: 0.5rem;
+        }
+        .bar {
+            background: var(--secondary-color);
+            height: 10px;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .bar span {
+            display: block;
+            height: 100%;
+            background: var(--primary-color);
+            border-radius: 5px;
+            width: 0;
+            transition: width 2s ease-in-out;
+        }
+        
+        /* --- Contact Section --- */
+        .contact {
+            padding: 4rem 2rem;
+            background-color: var(--secondary-color);
+            text-align: center;
+        }
+        .contact h2 {
+            font-size: 2.5rem;
+            margin-bottom: 2rem;
+            color: var(--primary-color);
+        }
+        .contact .social-links a {
+            font-size: 2rem;
+            color: var(--text-color);
+            margin: 0 1rem;
+            transition: color 0.3s ease;
+        }
+        .contact .social-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* --- Footer --- */
+        .footer {
+            text-align: center;
+            padding: 1.5rem;
+            background: #333;
+            color: white;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* --- Responsive Design --- */
+        @media(max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+            .navbar .container {
+                flex-direction: column;
+            }
+            .navbar .nav-links {
+                margin-top: 1rem;
+            }
+            .navbar .nav-links a {
+                margin: 0 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header & Navigation -->
+    <header class="navbar">
+        <div class="container">
+            <a href="#hero" class="logo">PAWAN</a>
+            <nav class="nav-links">
+                <a href="#hero">Home</a>
+                <a href="#about">About</a>
+                <a href="#skills">Skills</a>
+                <a href="#contact">Contact</a>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero">
+            <h1>Hi, I'm Pawan</h1>
+            <p>Creative Thinker & Passionate Doer</p>
+        </section>
+
+        <!-- About Section -->
+        <section id="about" class="about">
+            <div class="container">
+                <h2>More Than Just a Name</h2>
+                <div class="pawan-grid">
+                    <div class="pawan-card">
+                        <div class="icon"><i class="fas fa-fire"></i></div>
+                        <h3>P - Passionate</h3>
+                        <p>Completely dedicated and driven by a love for creating and learning new things.</p>
+                    </div>
+                    <div class="pawan-card">
+                        <div class="icon"><i class="fas fa-lightbulb"></i></div>
+                        <h3>A - Ambitious</h3>
+                        <p>Always aiming high, setting goals, and striving to achieve the best.</p>
+                    </div>
+                    <div class="pawan-card">
+                        <div class="icon"><i class="fas fa-code"></i></div>
+                        <h3>W - Wizard</h3>
+                        <p>A wizard at problem-solving, turning complex challenges into simple solutions.</p>
+                    </div>
+                    <div class="pawan-card">
+                        <div class="icon"><i class="fas fa-heart"></i></div>
+                        <h3>A - Amiable</h3>
+                        <p>Friendly, kind, and a great team player, always ready to help others.</p>
+                    </div>
+                    <div class="pawan-card">
+                        <div class="icon"><i class="fas fa-rocket"></i></div>
+                        <h3>N - Nimble</h3>
+                        <p>Quick, adaptive, and efficient in navigating through tasks and projects.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Skills Section -->
+        <section id="skills" class="skills">
+            <div class="container">
+                <h2>My Skills</h2>
+                <div class="skill-bars">
+                    <div class="skill-bar">
+                        <h4>HTML / CSS</h4>
+                        <div class="bar"><span class="html-css"></span></div>
+                    </div>
+                    <div class="skill-bar">
+                        <h4>JavaScript</h4>
+                        <div class="bar"><span class="javascript"></span></div>
+                    </div>
+                    <div class="skill-bar">
+                        <h4>Problem Solving</h4>
+                        <div class="bar"><span class="problem-solving"></span></div>
+                    </div>
+                    <div class="skill-bar">
+                        <h4>Creativity</h4>
+                        <div class="bar"><span class="creativity"></span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Section -->
+        <section id="contact" class="contact">
+            <div class="container">
+                <h2>Get In Touch</h2>
+                <p>Feel free to connect with me!</p>
+                <div class="social-links">
+                    <!-- Yahan pe actual links daal dena -->
+                    <a href="#"><i class="fab fa-linkedin"></i></a>
+                    <a href="#"><i class="fab fa-github"></i></a>
+                    <a href="#"><i class="fas fa-envelope"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>Made with <span style="color: red;">&hearts;</span> for Pawan</p>
+    </footer>
+
+    <script>
+        // --- JavaScript for Interactivity ---
+
+        // 1. Scroll-triggered animations for P-A-W-A-N cards
+        const cards = document.querySelectorAll('.pawan-card');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('show');
+                } 
+                // Optional: remove the class if you want the animation to replay every time
+                // else {
+                //     entry.target.classList.remove('show');
+                // }
+            });
+        }, {
+            threshold: 0.1 // Trigger when 10% of the element is visible
+        });
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+
+        // 2. Animated Skill Bars
+        const skillBars = document.querySelectorAll('.bar span');
+        
+        const skillObserver = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const bar = entry.target;
+                    // Set the width based on a data attribute or directly here
+                    if (bar.classList.contains('html-css')) bar.style.width = '90%';
+                    if (bar.classList.contains('javascript')) bar.style.width = '75%';
+                    if (bar.classList.contains('problem-solving')) bar.style.width = '95%';
+                    if (bar.classList.contains('creativity')) bar.style.width = '85%';
+                }
+            });
+        }, {
+            threshold: 0.5
+        });
+
+        skillBars.forEach(bar => {
+            skillObserver.observe(bar);
+        });
+        
+        // 3. Navbar background change on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 1)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0,0,0,0.1)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.9)';
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.1)';
+            }
+        });
+
+    </script>
+</body>
+</html>
 
