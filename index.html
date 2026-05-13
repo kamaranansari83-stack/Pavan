@@ -109,7 +109,6 @@
       background-size: 50px 50px;
     }
 
-    /* === Noise Texture === */
     .bg-noise {
       position: fixed;
       inset: 0;
@@ -117,8 +116,6 @@
       pointer-events: none;
       opacity: 0.03;
       background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-      background-repeat: repeat;
-      background-size: 200px 200px;
     }
 
     /* === Scrollbar === */
@@ -224,31 +221,56 @@
 
     .icon-btn:active { transform: scale(0.92); }
 
-    .icon-btn .badge {
-      position: absolute;
-      top: -4px; right: -4px;
-      width: 18px; height: 18px;
-      border-radius: 50%;
-      background: var(--danger);
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
+    /* === Date Navigation === */
+    .date-nav {
       display: flex;
       align-items: center;
       justify-content: center;
-      opacity: 0;
-      transform: scale(0);
-      transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+      gap: 12px;
+      margin-bottom: 8px;
+      animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.05s both;
     }
 
-    .icon-btn .badge.visible {
-      opacity: 1;
-      transform: scale(1);
+    .date-nav-btn {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--fg-secondary);
+      font-size: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.25s ease;
+    }
+
+    .date-nav-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .date-nav-btn:disabled {
+      opacity: 0.3;
+      pointer-events: none;
+    }
+
+    .current-date-display {
+      font-family: 'Outfit', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--fg);
+      min-width: 160px;
+      text-align: center;
+    }
+
+    .current-date-display.today {
+      color: var(--accent);
     }
 
     /* === Greeting Section === */
     .greeting-section {
-      padding: 24px 0 20px;
+      padding: 20px 0 20px;
       animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
     }
 
@@ -583,8 +605,6 @@
       animation: taskSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
       position: relative;
       overflow: hidden;
-      touch-action: pan-y;
-      user-select: none;
     }
 
     .task-item::before {
@@ -613,14 +633,8 @@
     }
 
     @keyframes taskSlideIn {
-      from {
-        opacity: 0;
-        transform: translateY(15px) scale(0.97);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
+      from { opacity: 0; transform: translateY(15px) scale(0.97); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
     }
 
     @keyframes taskRemove {
@@ -632,22 +646,6 @@
         margin-bottom: -8px;
         border-width: 0;
       }
-    }
-
-    /* Swipe hint */
-    .task-item .swipe-delete-bg {
-      position: absolute;
-      right: 0; top: 0; bottom: 0;
-      width: 80px;
-      background: var(--danger);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #fff;
-      font-size: 18px;
-      border-radius: 0 var(--radius) var(--radius) 0;
-      opacity: 0;
-      transition: opacity 0.2s ease;
     }
 
     /* Custom Checkbox */
@@ -729,16 +727,6 @@
       margin-top: 5px;
     }
 
-    .task-time {
-      font-size: 11px;
-      color: var(--fg-muted);
-      font-weight: 400;
-      opacity: 0.7;
-      display: flex;
-      align-items: center;
-      gap: 4px;
-    }
-
     .priority-dot {
       width: 7px;
       height: 7px;
@@ -760,6 +748,16 @@
     .priority-label.high { color: var(--priority-high); }
     .priority-label.medium { color: var(--priority-medium); }
     .priority-label.low { color: var(--priority-low); }
+
+    .task-time {
+      font-size: 11px;
+      color: var(--fg-muted);
+      font-weight: 400;
+      opacity: 0.7;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
 
     /* Delete Button */
     .task-delete {
@@ -889,6 +887,8 @@
       border-radius: var(--radius) var(--radius) 0 0;
       padding: 24px 24px calc(24px + var(--safe-bottom));
       animation: sheetUp 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh;
+      overflow-y: auto;
     }
 
     @keyframes sheetUp {
@@ -910,6 +910,9 @@
       font-weight: 700;
       margin-bottom: 20px;
       color: var(--fg);
+      display: flex;
+      align-items: center;
+      gap: 10px;
     }
 
     .form-group {
@@ -1127,6 +1130,159 @@
     .inline-add-btn:hover { box-shadow: 0 4px 20px var(--accent-glow); }
     .inline-add-btn:active { transform: scale(0.96); }
 
+    /* === History & Notes Specific Styles === */
+    .history-list, .notes-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 16px;
+    }
+
+    .history-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 14px;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .history-item:hover {
+      border-color: var(--border-light);
+      background: var(--card-hover);
+    }
+
+    .history-item.current {
+      border-color: var(--accent);
+      background: var(--accent-soft);
+    }
+
+    .history-date {
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--fg);
+    }
+
+    .history-stats {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      color: var(--fg-muted);
+    }
+
+    .history-stats .percent {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .history-progress-track {
+      width: 60px;
+      height: 4px;
+      background: var(--border);
+      border-radius: 2px;
+      overflow: hidden;
+    }
+
+    .history-progress-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 2px;
+    }
+
+    /* Notes */
+    .note-item {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px;
+      position: relative;
+      transition: all 0.2s ease;
+    }
+
+    .note-item:hover {
+      border-color: var(--border-light);
+    }
+
+    .note-content {
+      font-size: 14px;
+      line-height: 1.5;
+      color: var(--fg);
+      white-space: pre-wrap;
+      word-break: break-word;
+      margin-bottom: 8px;
+      min-height: 40px;
+      padding: 8px;
+      background: rgba(0,0,0,0.1);
+      border-radius: var(--radius-xs);
+    }
+
+    .note-content[contenteditable="true"] {
+      outline: none;
+      box-shadow: 0 0 0 2px var(--accent-soft);
+      border: 1px solid var(--accent);
+    }
+
+    .note-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 8px;
+    }
+
+    .note-btn {
+      font-size: 11px;
+      padding: 5px 10px;
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--fg-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+    }
+
+    .note-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .note-btn.save {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .note-btn.delete:hover {
+      border-color: var(--danger);
+      color: var(--danger);
+      background: var(--danger-glow);
+    }
+
+    .add-note-btn {
+      width: 100%;
+      padding: 12px;
+      background: var(--card);
+      border: 2px dashed var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--fg-muted);
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: 'Space Grotesk', sans-serif;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+
+    .add-note-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
     /* === Toast === */
     .toast-container {
       position: fixed;
@@ -1215,6 +1371,8 @@
       .stat-number { font-size: 34px; }
       .progress-ring-wrapper { width: 90px; height: 90px; }
       .progress-ring-svg { width: 90px; height: 90px; }
+      .modal-overlay { align-items: center; }
+      .modal-sheet { border-radius: var(--radius); margin: 20px; }
     }
 
     /* Mobile adjustments */
@@ -1274,7 +1432,9 @@
     @media (min-width: 601px) {
       .fab { display: none !important; }
       .inline-form { display: block !important; }
-      .modal-overlay { display: none !important; }
+      /* Modal overlay is handled by JS toggle, but we ensure it's centered */
+      .modal-overlay { align-items: center; }
+      .modal-sheet { max-height: 85vh; border-radius: var(--radius); }
     }
 
     /* Reduced motion */
@@ -1320,36 +1480,6 @@
     <i class="fas fa-plus"></i>
   </button>
 
-  <!-- Mobile Modal -->
-  <div class="modal-overlay" id="modalOverlay">
-    <div class="modal-sheet">
-      <div class="modal-handle"></div>
-      <h2 class="modal-title">Add New Task</h2>
-      <div class="form-group">
-        <label class="form-label" for="modalTaskInput">Task Description</label>
-        <input type="text" class="form-input" id="modalTaskInput" placeholder="What needs to be done?" maxlength="150">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Priority Level</label>
-        <div class="priority-selector" id="modalPrioritySelector">
-          <div class="priority-option high selected" data-priority="high">
-            <i class="fas fa-fire"></i> High
-          </div>
-          <div class="priority-option medium" data-priority="medium">
-            <i class="fas fa-minus"></i> Medium
-          </div>
-          <div class="priority-option low" data-priority="low">
-            <i class="fas fa-leaf"></i> Low
-          </div>
-        </div>
-      </div>
-      <div class="modal-actions">
-        <button class="btn btn-secondary" id="modalCancel">Cancel</button>
-        <button class="btn btn-primary" id="modalAdd">Add Task</button>
-      </div>
-    </div>
-  </div>
-
   <!-- Main App -->
   <div class="app-shell">
 
@@ -1363,19 +1493,35 @@
         </div>
       </div>
       <div class="top-bar-right">
+        <button class="icon-btn" id="notesBtn" aria-label="Open Notes" title="Important Notes">
+          <i class="fas fa-sticky-note"></i>
+        </button>
+        <button class="icon-btn" id="historyBtn" aria-label="View History" title="Task History">
+          <i class="fas fa-chart-line"></i>
+        </button>
         <button class="icon-btn" id="clearAllBtn" aria-label="Clear all tasks" title="Clear all tasks">
           <i class="fas fa-trash-can"></i>
-          <span class="badge" id="clearBadge">0</span>
         </button>
       </div>
     </header>
+
+    <!-- Date Navigation -->
+    <div class="date-nav">
+      <button class="date-nav-btn" id="prevDayBtn" aria-label="Previous day">
+        <i class="fas fa-chevron-left"></i>
+      </button>
+      <div class="current-date-display" id="currentDateDisplay">Today</div>
+      <button class="date-nav-btn" id="nextDayBtn" aria-label="Next day">
+        <i class="fas fa-chevron-right"></i>
+      </button>
+    </div>
 
     <!-- Greeting -->
     <section class="greeting-section">
       <h2 class="greeting-text" id="greetingText">
         <span class="wave" aria-hidden="true">&#128075;</span> Let's crush it today
       </h2>
-      <p class="greeting-sub">You have <span class="date-highlight" id="taskSummary">no tasks</span> &middot; <span class="date-highlight" id="dateText"></span></p>
+      <p class="greeting-sub">You have <span class="date-highlight" id="taskSummary">no tasks</span> for this day.</p>
     </section>
 
     <!-- Stats -->
@@ -1466,30 +1612,127 @@
 
     <!-- Footer -->
     <footer class="app-footer">
-      <p class="footer-text">DailyFlow &mdash; I Love You So Much That You Can't Even Imagine.</p>
+      <p class="footer-text">DailyFlow &mdash; I Love You So Much That Even You Can't Imagine.</p>
     </footer>
   </div>
 
+  <!-- MODALS (Hidden by default) -->
+
+  <!-- Add Task Modal (Mobile) -->
+  <div class="modal-overlay" id="addModalOverlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title"><i class="fas fa-plus-circle"></i> Add New Task</h2>
+      <div class="form-group">
+        <label class="form-label" for="modalTaskInput">Task Description</label>
+        <input type="text" class="form-input" id="modalTaskInput" placeholder="What needs to be done?" maxlength="150">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Priority Level</label>
+        <div class="priority-selector" id="modalPrioritySelector">
+          <div class="priority-option high selected" data-priority="high">
+            <i class="fas fa-fire"></i> High
+          </div>
+          <div class="priority-option medium" data-priority="medium">
+            <i class="fas fa-minus"></i> Medium
+          </div>
+          <div class="priority-option low" data-priority="low">
+            <i class="fas fa-leaf"></i> Low
+          </div>
+        </div>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" id="modalCancel">Cancel</button>
+        <button class="btn btn-primary" id="modalAdd">Add Task</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- History Modal -->
+  <div class="modal-overlay" id="historyModalOverlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title"><i class="fas fa-history"></i> Task History</h2>
+      <p style="font-size: 13px; color: var(--fg-muted); margin-bottom: 10px;">Select a day to view or edit tasks.</p>
+      <div class="history-list" id="historyList">
+        <!-- Populated by JS -->
+      </div>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button class="btn btn-secondary" id="closeHistoryBtn" style="width: 100%;">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notes Modal -->
+  <div class="modal-overlay" id="notesModalOverlay">
+    <div class="modal-sheet">
+      <div class="modal-handle"></div>
+      <h2 class="modal-title"><i class="fas fa-sticky-note"></i> Important Notes</h2>
+      <p style="font-size: 13px; color: var(--fg-muted); margin-bottom: 10px;">Important Note Bad me Likh lena pahle Ye batao :What is the full form of PCT? </p>
+      <div class="notes-list" id="notesList">
+        <!-- Populated by JS -->
+      </div>
+      <button class="add-note-btn" id="addNoteBtn">
+        <i class="fas fa-plus"></i> Add New Note
+      </button>
+      <div class="modal-actions" style="margin-top: 20px;">
+        <button class="btn btn-secondary" id="closeNotesBtn" style="width: 100%;">Close</button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    // === App State ===
-    let tasks = [];
-    let currentFilter = 'all';
-    let selectedPriority = 'medium';
-    let modalPriority = 'high';
-    let previousDoneCount = 0;
-
-    // Load from localStorage
-    try {
-      const saved = localStorage.getItem('dailyflow_tasks_v2');
-      if (saved) tasks = JSON.parse(saved);
-    } catch (e) { tasks = []; }
-
-    previousDoneCount = tasks.filter(t => t.completed).length;
-
-    // === DOM References ===
+    // === Utility Functions ===
     const $ = (sel) => document.querySelector(sel);
     const $$ = (sel) => document.querySelectorAll(sel);
+    
+    // Simple ID generator
+    const genId = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
+    // Date Helpers
+    const getTodayKey = () => {
+        const d = new Date();
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+    };
+
+    const formatDisplayDate = (key) => {
+        const d = new Date(key + 'T00:00:00');
+        const today = new Date();
+        const todayKey = getTodayKey();
+        
+        if (key === todayKey) return 'Today';
+        
+        const yesterday = new Date(today);
+        yesterday.setDate(yesterday.getDate() - 1);
+        if (key === `${yesterday.getFullYear()}-${String(yesterday.getMonth()+1).padStart(2,'0')}-${String(yesterday.getDate()).padStart(2,'0')}`) return 'Yesterday';
+        
+        return d.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+    };
+
+    const formatPrettyDate = (key) => {
+        const d = new Date(key + 'T00:00:00');
+        return d.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    };
+
+    // === App State ===
+    let appData = {
+        tasks: {}, // { "YYYY-MM-DD": [ {id, text, completed, priority, createdAt} ] }
+        notes: []  // [ {id, text, updatedAt} ]
+    };
+    
+    let currentDateKey = getTodayKey();
+    let currentFilter = 'all';
+    let selectedPriority = 'medium'; // Desktop inline
+    let modalPriority = 'high'; // Mobile modal default
+    let previousDoneCount = 0;
+
+    // Load Data
+    try {
+        const saved = localStorage.getItem('dailyflow_data_v3');
+        if (saved) appData = JSON.parse(saved);
+    } catch (e) { console.error("Error loading data", e); }
+
+    // === DOM References ===
     const taskList = $('#taskList');
     const totalCount = $('#totalCount');
     const activeCount = $('#activeCount');
@@ -1501,142 +1744,120 @@
     const progressDesc = $('#progressDesc');
     const toastContainer = $('#toastContainer');
     const confettiContainer = $('#confettiContainer');
-    const dateText = $('#dateText');
     const greetingLine = $('#greetingLine');
     const greetingText = $('#greetingText');
     const taskSummary = $('#taskSummary');
-    const clearBadge = $('#clearBadge');
-    const fab = $('#fab');
-    const modalOverlay = $('#modalOverlay');
-    const modalTaskInput = $('#modalTaskInput');
-    const modalPrioritySelector = $('#modalPrioritySelector');
-    const inlineInput = $('#inlineInput');
-    const inlinePriorityRow = $('#inlinePriorityRow');
+    const currentDateDisplay = $('#currentDateDisplay');
 
-    // === Initialize Date & Greeting ===
+    // === Initialize Greeting based on actual current time (not selected date) ===
     function initGreeting() {
       const now = new Date();
       const hour = now.getHours();
       let greeting = 'Good evening';
-      let emoji = '&#127769;';
-
-      if (hour < 12) { greeting = 'Good morning'; emoji = '&#127749;'; }
-      else if (hour < 17) { greeting = 'Good afternoon'; emoji = '&#9728;&#65039;'; }
-      else { greeting = 'Good evening'; emoji = '&#127769;'; }
-
+      if (hour < 12) greeting = 'Good morning';
+      else if (hour < 17) greeting = 'Good afternoon';
       greetingLine.textContent = greeting;
 
       const motivational = [
-        "Let's crush it today",
-        "Make every minute count",
-        "One task at a time",
-        "You've got this",
-        "Stay focused, stay sharp",
-        "Progress over perfection"
+        "Let's crush it today", "Make every minute count", "One task at a time",
+        "You've got this", "Stay focused, stay sharp", "Progress over perfection"
       ];
+      const emoji = hour < 12 ? '&#127749;' : (hour < 17 ? '&#9728;&#65039;' : '&#127769;');
       const pick = motivational[Math.floor(Math.random() * motivational.length)];
       greetingText.innerHTML = `<span class="wave" aria-hidden="true">${emoji}</span> ${pick}`;
-
-      const dateOptions = { weekday: 'short', month: 'short', day: 'numeric' };
-      dateText.textContent = now.toLocaleDateString('en-US', dateOptions);
     }
 
-    // === Save ===
-    function saveTasks() {
+    // === Save Data ===
+    function saveData() {
       try {
-        localStorage.setItem('dailyflow_tasks_v2', JSON.stringify(tasks));
-      } catch (e) { /* Storage full */ }
+        localStorage.setItem('dailyflow_data_v3', JSON.stringify(appData));
+      } catch (e) { console.error("Error saving data", e); }
     }
 
-    // === Animate Number ===
-    function animateNumber(el, from, to) {
-      if (from === to) return;
-      const duration = 350;
-      const start = performance.now();
-      function step(now) {
-        const p = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(from + (to - from) * eased);
-        if (p < 1) requestAnimationFrame(step);
-      }
-      requestAnimationFrame(step);
+    // === Date Navigation ===
+    function changeDate(days) {
+        const d = new Date(currentDateKey + 'T00:00:00');
+        d.setDate(d.getDate() + days);
+        currentDateKey = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+        
+        // Update UI
+        currentDateDisplay.textContent = formatDisplayDate(currentDateKey);
+        currentDateDisplay.classList.toggle('today', currentDateKey === getTodayKey());
+        
+        // Disable future navigation
+        $('#nextDayBtn').disabled = currentDateKey === getTodayKey();
+        
+        renderTasks();
     }
 
-    // === Update Stats ===
+    $('#prevDayBtn').addEventListener('click', () => changeDate(-1));
+    $('#nextDayBtn').addEventListener('click', () => changeDate(1));
+
+    // === Task Rendering & Logic ===
+    function getTasksForCurrentDate() {
+        return appData.tasks[currentDateKey] || [];
+    }
+
     function updateStats() {
+      const tasks = getTasksForCurrentDate();
       const total = tasks.length;
       const done = tasks.filter(t => t.completed).length;
       const active = total - done;
       const percent = total === 0 ? 0 : Math.round((done / total) * 100);
 
-      animateNumber(totalCount, parseInt(totalCount.textContent) || 0, total);
-      animateNumber(activeCount, parseInt(activeCount.textContent) || 0, active);
-      animateNumber(doneCount, parseInt(doneCount.textContent) || 0, done);
+      // Animate numbers
+      const animNum = (el, to) => {
+          const from = parseInt(el.textContent) || 0;
+          if (from === to) return;
+          const step = (p) => el.textContent = Math.round(from + (to - from) * p);
+          let start = null;
+          const anim = (t) => { if (!start) start = t; const p = Math.min((t - start)/350, 1); step(1-Math.pow(1-p,3)); if(p<1) requestAnimationFrame(anim); };
+          requestAnimationFrame(anim);
+      };
+      
+      animNum(totalCount, total);
+      animNum(activeCount, active);
+      animNum(doneCount, done);
 
-      // Progress ring
-      const circumference = 2 * Math.PI * 34; // ~213.628
+      // Progress Ring
+      const circumference = 2 * Math.PI * 34;
       const offset = circumference - (percent / 100) * circumference;
       progressRing.style.strokeDashoffset = offset;
       progressPercent.textContent = percent + '%';
       progressBarFill.style.width = percent + '%';
 
-      // Progress text
+      // Text updates
       if (total === 0) {
-        progressTitle.textContent = 'Get started';
-        progressDesc.textContent = 'Add tasks and start checking them off to see your progress grow.';
+        progressTitle.textContent = 'No tasks planned';
+        progressDesc.textContent = currentDateKey === getTodayKey() ? 'Add tasks to get started.' : 'No tasks for this day.';
       } else if (percent === 100) {
         progressTitle.textContent = 'All done!';
-        progressDesc.textContent = 'Incredible work! You\'ve completed every task on your list.';
-      } else if (percent >= 50) {
-        progressTitle.textContent = 'Almost there';
-        progressDesc.textContent = `${active} task${active > 1 ? 's' : ''} remaining. Keep pushing!`;
+        progressDesc.textContent = 'Incredible work! You\'ve completed everything.';
       } else {
-        progressTitle.textContent = 'Keep going';
-        progressDesc.textContent = `${done} of ${total} tasks completed. You can do this!`;
+        progressTitle.textContent = 'In progress';
+        progressDesc.textContent = `${done} of ${total} tasks completed.`;
       }
 
-      // Task summary
-      if (total === 0) taskSummary.textContent = 'no tasks';
-      else if (active === 0) taskSummary.textContent = 'all tasks done';
-      else taskSummary.textContent = `${active} active task${active > 1 ? 's' : ''}`;
+      // Header summary
+      taskSummary.textContent = total === 0 ? 'no tasks' : (active === 0 ? 'all tasks done' : `${active} active task${active>1?'s':''}`);
 
-      // Filter count badges
+      // Filter badges
       $('#countAll').textContent = total;
       $('#countActive').textContent = active;
       $('#countDone').textContent = done;
 
-      // Clear badge
-      clearBadge.textContent = total;
-      if (total > 0) clearBadge.classList.add('visible');
-      else clearBadge.classList.remove('visible');
-
-      // Celebrate
-      if (done > 0 && done === total && total > 0 && done > previousDoneCount) {
-        showToast('All tasks completed! Outstanding!', 'success');
-        launchConfetti();
+      // Celebration check (only if today)
+      if (currentDateKey === getTodayKey()) {
+          if (done > 0 && done === total && total > 0 && done > previousDoneCount) {
+            showToast('All tasks completed! Outstanding!', 'success');
+            launchConfetti();
+          }
+          previousDoneCount = done;
       }
-      previousDoneCount = done;
     }
 
-    // === Format Time ===
-    function formatTime(ts) {
-      const d = new Date(ts);
-      let h = d.getHours();
-      const m = d.getMinutes().toString().padStart(2, '0');
-      const ampm = h >= 12 ? 'PM' : 'AM';
-      h = h % 12 || 12;
-      return `${h}:${m} ${ampm}`;
-    }
-
-    // === Escape HTML ===
-    function esc(text) {
-      const d = document.createElement('div');
-      d.textContent = text;
-      return d.innerHTML;
-    }
-
-    // === Render Tasks ===
     function renderTasks() {
+      const tasks = getTasksForCurrentDate();
       const filtered = tasks.filter(t => {
         if (currentFilter === 'active') return !t.completed;
         if (currentFilter === 'completed') return t.completed;
@@ -1647,9 +1868,9 @@
 
       if (filtered.length === 0) {
         const msgs = {
-          all: { icon: 'fa-clipboard-list', title: 'No tasks yet', desc: 'Tap the + button to add your first task' },
-          active: { icon: 'fa-mug-hot', title: 'All caught up', desc: 'No active tasks — enjoy the moment' },
-          completed: { icon: 'fa-trophy', title: 'No completed tasks', desc: 'Start checking off tasks to see them here' }
+          all: { icon: 'fa-clipboard-list', title: 'No tasks', desc: currentDateKey === getTodayKey() ? 'Tap + to add a task' : 'No tasks scheduled' },
+          active: { icon: 'fa-mug-hot', title: 'All caught up', desc: 'No active tasks remaining' },
+          completed: { icon: 'fa-trophy', title: 'Nothing done yet', desc: 'Start checking off tasks' }
         };
         const m = msgs[currentFilter];
         taskList.innerHTML = `
@@ -1662,11 +1883,11 @@
         return;
       }
 
-      // Sort: active first (high → medium → low), then completed
-      const priorityOrder = { high: 0, medium: 1, low: 2 };
+      // Sort
+      const pOrder = { high: 0, medium: 1, low: 2 };
       const sorted = [...filtered].sort((a, b) => {
         if (a.completed !== b.completed) return a.completed ? 1 : -1;
-        return priorityOrder[a.priority] - priorityOrder[b.priority];
+        return pOrder[a.priority] - pOrder[b.priority];
       });
 
       sorted.forEach((task, i) => {
@@ -1686,53 +1907,21 @@
             <div class="task-meta">
               <span class="priority-dot ${task.priority}"></span>
               <span class="priority-label ${task.priority}">${task.priority}</span>
-              <span class="task-time"><i class="far fa-clock"></i> ${formatTime(task.createdAt)}</span>
+              <span class="task-time"><i class="far fa-clock"></i> ${new Date(task.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
             </div>
           </div>
           <button class="task-delete" aria-label="Delete task"><i class="fas fa-xmark"></i></button>`;
 
         // Toggle
-        el.querySelector('input[type="checkbox"]').addEventListener('change', function() {
+        el.querySelector('input').addEventListener('change', function() {
           task.completed = this.checked;
-          saveTasks();
-          setTimeout(() => renderTasks(), 250);
+          saveData();
+          setTimeout(() => renderTasks(), 200);
           if (task.completed) showToast('Task completed!', 'success');
         });
 
         // Delete
         el.querySelector('.task-delete').addEventListener('click', () => deleteTask(task.id, el));
-
-        // Swipe to delete (touch)
-        let startX = 0, currentX = 0, swiping = false;
-        el.addEventListener('touchstart', (e) => {
-          startX = e.touches[0].clientX;
-          swiping = true;
-          el.style.transition = 'none';
-        }, { passive: true });
-
-        el.addEventListener('touchmove', (e) => {
-          if (!swiping) return;
-          currentX = e.touches[0].clientX;
-          const diff = currentX - startX;
-          if (diff < 0) {
-            el.style.transform = `translateX(${Math.max(diff, -100)}px)`;
-            el.style.opacity = Math.max(1 + diff / 300, 0.4);
-          }
-        }, { passive: true });
-
-        el.addEventListener('touchend', () => {
-          if (!swiping) return;
-          swiping = false;
-          el.style.transition = 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)';
-          const diff = currentX - startX;
-          if (diff < -80) {
-            deleteTask(task.id, el);
-          } else {
-            el.style.transform = '';
-            el.style.opacity = '';
-          }
-          currentX = 0;
-        });
 
         taskList.appendChild(el);
       });
@@ -1740,114 +1929,211 @@
       updateStats();
     }
 
-    // === Delete Task ===
     function deleteTask(id, el) {
       el.classList.add('removing');
       setTimeout(() => {
-        tasks = tasks.filter(t => t.id !== id);
-        saveTasks();
+        if (!appData.tasks[currentDateKey]) return;
+        appData.tasks[currentDateKey] = appData.tasks[currentDateKey].filter(t => t.id !== id);
+        saveData();
         renderTasks();
         showToast('Task removed', 'error');
       }, 380);
     }
 
-    // === Add Task ===
     function addTask(text, priority) {
       text = text.trim();
       if (!text) {
-        showToast('Please enter a task description', 'info');
+        showToast('Please enter a task', 'info');
         return false;
       }
-
-      tasks.unshift({
-        id: Date.now().toString(36) + Math.random().toString(36).slice(2, 8),
+      if (!appData.tasks[currentDateKey]) appData.tasks[currentDateKey] = [];
+      
+      appData.tasks[currentDateKey].unshift({
+        id: genId(),
         text,
         priority: priority || 'medium',
         completed: false,
         createdAt: Date.now()
       });
 
-      saveTasks();
+      saveData();
       renderTasks();
-      showToast('Task added successfully', 'success');
+      showToast('Task added', 'success');
       return true;
     }
 
-    // === Desktop Inline Form ===
-    $('#inlineAddBtn').addEventListener('click', () => {
-      if (addTask(inlineInput.value, selectedPriority)) {
-        inlineInput.value = '';
-        inlineInput.focus();
-      }
-    });
-
-    inlineInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        if (addTask(inlineInput.value, selectedPriority)) {
-          inlineInput.value = '';
-        }
-      }
-    });
-
-    // Inline priority buttons
-    inlinePriorityRow.querySelectorAll('.inline-priority-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        inlinePriorityRow.querySelectorAll('.inline-priority-btn').forEach(b => b.classList.remove('selected'));
-        btn.classList.add('selected');
-        selectedPriority = btn.dataset.priority;
-      });
-    });
-
-    // === Mobile FAB & Modal ===
-    fab.addEventListener('click', () => {
-      modalOverlay.classList.add('active');
-      modalTaskInput.value = '';
-      modalPriority = 'high';
-      modalPrioritySelector.querySelectorAll('.priority-option').forEach(o => {
-        o.classList.toggle('selected', o.dataset.priority === 'high');
-      });
-      setTimeout(() => modalTaskInput.focus(), 300);
-    });
-
-    $('#modalCancel').addEventListener('click', closeModal);
-    modalOverlay.addEventListener('click', (e) => {
-      if (e.target === modalOverlay) closeModal();
-    });
-
-    function closeModal() {
-      modalOverlay.classList.remove('active');
+    function esc(str) {
+        const d = document.createElement('div');
+        d.textContent = str;
+        return d.innerHTML;
     }
 
-    // Modal priority selector
-    modalPrioritySelector.querySelectorAll('.priority-option').forEach(opt => {
-      opt.addEventListener('click', () => {
-        modalPrioritySelector.querySelectorAll('.priority-option').forEach(o => o.classList.remove('selected'));
-        opt.classList.add('selected');
-        modalPriority = opt.dataset.priority;
-      });
+    // === History Logic ===
+    function renderHistory() {
+        const list = $('#historyList');
+        const keys = Object.keys(appData.tasks).sort((a,b) => new Date(b) - new Date(a));
+        
+        // Limit to last 30 days with tasks for performance
+        const recentKeys = keys.slice(0, 30);
+        
+        if (recentKeys.length === 0) {
+            list.innerHTML = '<div style="text-align:center; padding: 20px; color:var(--fg-muted);">No history yet.</div>';
+            return;
+        }
+
+        list.innerHTML = recentKeys.map(key => {
+            const tasks = appData.tasks[key];
+            const total = tasks.length;
+            const done = tasks.filter(t => t.completed).length;
+            const percent = total === 0 ? 0 : Math.round((done/total)*100);
+            
+            return `
+                <div class="history-item ${key === currentDateKey ? 'current' : ''}" data-key="${key}">
+                    <div class="history-date">${formatPrettyDate(key)}</div>
+                    <div class="history-stats">
+                        <span class="percent">${percent}%</span>
+                        <div class="history-progress-track">
+                            <div class="history-progress-fill" style="width: ${percent}%"></div>
+                        </div>
+                        <span>${done}/${total}</span>
+                    </div>
+                </div>
+            `;
+        }).join('');
+
+        // Add click listeners
+        list.querySelectorAll('.history-item').forEach(item => {
+            item.addEventListener('click', () => {
+                currentDateKey = item.dataset.key;
+                currentDateDisplay.textContent = formatDisplayDate(currentDateKey);
+                currentDateDisplay.classList.toggle('today', currentDateKey === getTodayKey());
+                $('#nextDayBtn').disabled = currentDateKey === getTodayKey();
+                renderTasks();
+                closeHistory();
+            });
+        });
+    }
+
+    // === Notes Logic ===
+    function renderNotes() {
+        const list = $('#notesList');
+        if (appData.notes.length === 0) {
+            list.innerHTML = '<div style="text-align:center; padding: 20px; color:var(--fg-muted);">No notes yet.</div>';
+            return;
+        }
+
+        list.innerHTML = appData.notes.map(note => `
+            <div class="note-item" data-id="${note.id}">
+                <div class="note-content" contenteditable="false">${esc(note.text)}</div>
+                <div class="note-actions">
+                    <button class="note-btn edit"><i class="fas fa-pen"></i> Edit</button>
+                    <button class="note-btn delete"><i class="fas fa-trash"></i></button>
+                </div>
+            </div>
+        `).join('');
+
+        // Listeners
+        list.querySelectorAll('.note-item').forEach(item => {
+            const id = item.dataset.id;
+            const noteObj = appData.notes.find(n => n.id === id);
+            const content = item.querySelector('.note-content');
+            
+            item.querySelector('.note-btn.edit').addEventListener('click', (e) => {
+                const btn = e.currentTarget;
+                const isEditing = content.contentEditable === 'true';
+                
+                if (isEditing) {
+                    // Save
+                    noteObj.text = content.innerText;
+                    noteObj.updatedAt = Date.now();
+                    saveData();
+                    content.contentEditable = 'false';
+                    btn.innerHTML = '<i class="fas fa-pen"></i> Edit';
+                    btn.classList.remove('save');
+                    showToast('Note saved', 'success');
+                } else {
+                    // Edit mode
+                    content.contentEditable = 'true';
+                    content.focus();
+                    btn.innerHTML = '<i class="fas fa-check"></i> Save';
+                    btn.classList.add('save');
+                }
+            });
+
+            item.querySelector('.note-btn.delete').addEventListener('click', () => {
+                appData.notes = appData.notes.filter(n => n.id !== id);
+                saveData();
+                renderNotes();
+                showToast('Note deleted', 'error');
+            });
+        });
+    }
+
+    $('#addNoteBtn').addEventListener('click', () => {
+        appData.notes.unshift({
+            id: genId(),
+            text: 'New note...',
+            updatedAt: Date.now()
+        });
+        saveData();
+        renderNotes();
+        // Auto click edit on the new note
+        const firstNote = $('#notesList .note-item');
+        if(firstNote) firstNote.querySelector('.note-btn.edit').click();
     });
+
+    // === Event Listeners ===
+    
+    // Desktop Form
+    $('#inlineAddBtn').addEventListener('click', () => {
+      if (addTask($('#inlineInput').value, selectedPriority)) $('#inlineInput').value = '';
+    });
+    $('#inlineInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && addTask($('#inlineInput').value, selectedPriority)) $('#inlineInput').value = '';
+    });
+    $('#inlinePriorityRow').addEventListener('click', (e) => {
+        const btn = e.target.closest('.inline-priority-btn');
+        if(btn) {
+            $$('.inline-priority-btn').forEach(b => b.classList.remove('selected'));
+            btn.classList.add('selected');
+            selectedPriority = btn.dataset.priority;
+        }
+    });
+
+    // Mobile Modal (FAB)
+    const addModal = $('#addModalOverlay');
+    const fab = $('#fab');
+    
+    fab.addEventListener('click', () => {
+      addModal.classList.add('active');
+      $('#modalTaskInput').value = '';
+      $('#modalTaskInput').focus();
+    });
+    
+    $('#modalCancel').addEventListener('click', () => addModal.classList.remove('active'));
+    addModal.addEventListener('click', (e) => { if(e.target === addModal) addModal.classList.remove('active'); });
 
     $('#modalAdd').addEventListener('click', () => {
-      if (addTask(modalTaskInput.value, modalPriority)) {
-        closeModal();
-      }
+      if (addTask($('#modalTaskInput').value, modalPriority)) addModal.classList.remove('active');
+    });
+    
+    $('#modalTaskInput').addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' && addTask($('#modalTaskInput').value, modalPriority)) addModal.classList.remove('active');
     });
 
-    modalTaskInput.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') {
-        if (addTask(modalTaskInput.value, modalPriority)) {
-          closeModal();
+    $('#modalPrioritySelector').addEventListener('click', (e) => {
+        const opt = e.target.closest('.priority-option');
+        if(opt) {
+            $$('.priority-option').forEach(o => o.classList.remove('selected'));
+            opt.classList.add('selected');
+            modalPriority = opt.dataset.priority;
         }
-      }
     });
 
-    // === Filter Tabs ===
+    // Filters
     $$('.filter-tab').forEach(tab => {
       tab.addEventListener('click', () => {
-        $$('.filter-tab').forEach(t => {
-          t.classList.remove('active');
-          t.setAttribute('aria-selected', 'false');
-        });
+        $$('.filter-tab').forEach(t => { t.classList.remove('active'); t.setAttribute('aria-selected', 'false'); });
         tab.classList.add('active');
         tab.setAttribute('aria-selected', 'true');
         currentFilter = tab.dataset.filter;
@@ -1855,40 +2141,55 @@
       });
     });
 
-    // === Clear Completed ===
+    // Clear Buttons
     $('#clearDoneBtn').addEventListener('click', () => {
+      const tasks = getTasksForCurrentDate();
       const count = tasks.filter(t => t.completed).length;
-      if (count === 0) {
-        showToast('No completed tasks to clear', 'info');
-        return;
-      }
-      // Animate removal
+      if (count === 0) { showToast('No completed tasks', 'info'); return; }
+      
       taskList.querySelectorAll('.task-item.completed').forEach(el => el.classList.add('removing'));
       setTimeout(() => {
-        tasks = tasks.filter(t => !t.completed);
-        saveTasks();
+        appData.tasks[currentDateKey] = appData.tasks[currentDateKey].filter(t => !t.completed);
+        saveData();
         renderTasks();
-        showToast(`${count} completed task${count > 1 ? 's' : ''} cleared`, 'error');
+        showToast(`Cleared ${count} tasks`, 'error');
       }, 380);
     });
 
-    // === Clear All ===
     $('#clearAllBtn').addEventListener('click', () => {
-      if (tasks.length === 0) {
-        showToast('No tasks to clear', 'info');
-        return;
-      }
+      const tasks = getTasksForCurrentDate();
+      if (tasks.length === 0) { showToast('No tasks to clear', 'info'); return; }
+      
       taskList.querySelectorAll('.task-item').forEach(el => el.classList.add('removing'));
       setTimeout(() => {
         const count = tasks.length;
-        tasks = [];
-        saveTasks();
+        delete appData.tasks[currentDateKey];
+        saveData();
         renderTasks();
-        showToast(`All ${count} tasks cleared`, 'error');
+        showToast(`Cleared ${count} tasks`, 'error');
       }, 380);
     });
 
-    // === Toast ===
+    // History Modal
+    const histModal = $('#historyModalOverlay');
+    $('#historyBtn').addEventListener('click', () => {
+        renderHistory();
+        histModal.classList.add('active');
+    });
+    $('#closeHistoryBtn').addEventListener('click', () => histModal.classList.remove('active'));
+    histModal.addEventListener('click', (e) => { if(e.target === histModal) histModal.classList.remove('active'); });
+    function closeHistory() { histModal.classList.remove('active'); }
+
+    // Notes Modal
+    const notesModal = $('#notesModalOverlay');
+    $('#notesBtn').addEventListener('click', () => {
+        renderNotes();
+        notesModal.classList.add('active');
+    });
+    $('#closeNotesBtn').addEventListener('click', () => notesModal.classList.remove('active'));
+    notesModal.addEventListener('click', (e) => { if(e.target === notesModal) notesModal.classList.remove('active'); });
+
+    // === Toast & Confetti ===
     function showToast(message, type = 'info') {
       const toast = document.createElement('div');
       toast.className = `toast ${type}`;
@@ -1901,35 +2202,25 @@
       }, 2500);
     }
 
-    // === Confetti ===
     function launchConfetti() {
-      const colors = ['#e8a838', '#3ecf7a', '#e85454', '#6495ed', '#f0c060', '#ff6b9d', '#a855f7'];
-      for (let i = 0; i < 70; i++) {
-        const piece = document.createElement('div');
-        piece.className = 'confetti-piece';
-        piece.style.left = Math.random() * 100 + 'vw';
-        piece.style.top = '-10px';
-        piece.style.background = colors[Math.floor(Math.random() * colors.length)];
-        piece.style.animationDelay = Math.random() * 0.7 + 's';
-        piece.style.animationDuration = (1.2 + Math.random() * 1.5) + 's';
-        const size = 4 + Math.random() * 9;
-        piece.style.width = size + 'px';
-        piece.style.height = size + 'px';
-        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
-        confettiContainer.appendChild(piece);
-        setTimeout(() => piece.remove(), 3000);
+      const colors = ['#e8a838', '#3ecf7a', '#e85454', '#6495ed', '#f0c060'];
+      for (let i = 0; i < 60; i++) {
+        const p = document.createElement('div');
+        p.className = 'confetti-piece';
+        p.style.left = Math.random() * 100 + 'vw';
+        p.style.top = '-10px';
+        p.style.background = colors[Math.floor(Math.random() * colors.length)];
+        p.style.animationDelay = Math.random() * 0.5 + 's';
+        p.style.width = p.style.height = (4 + Math.random() * 8) + 'px';
+        confettiContainer.appendChild(p);
+        setTimeout(() => p.remove(), 2500);
       }
     }
 
-    // === Keyboard: Escape closes modal ===
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && modalOverlay.classList.contains('active')) {
-        closeModal();
-      }
-    });
-
     // === Init ===
     initGreeting();
+    currentDateDisplay.textContent = formatDisplayDate(currentDateKey);
+    $('#nextDayBtn').disabled = true; // Start on today, can't go forward
     renderTasks();
   </script>
 </body>
