@@ -314,6 +314,103 @@
       font-weight: 500;
     }
 
+    /* === NEW COUNTDOWN SECTION === */
+    .countdown-section {
+      background: rgba(24, 24, 31, 0.6);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 20px;
+      margin-bottom: 24px;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      animation: slideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.15s both;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    }
+
+    .countdown-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--fg-secondary);
+      margin-bottom: 15px;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* Animated border gradient effect */
+    .countdown-section::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent), var(--success), var(--danger), var(--accent), transparent);
+      background-size: 200% 100%;
+      animation: gradientMove 4s linear infinite;
+    }
+
+    @keyframes gradientMove {
+      0% { background-position: 100% 0; }
+      100% { background-position: -100% 0; }
+    }
+
+    .countdown-timer {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .timer-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: var(--bg-secondary);
+      border-radius: var(--radius-sm);
+      padding: 12px 4px;
+      border: 1px solid var(--border-light);
+      position: relative;
+      transition: transform 0.3s ease;
+    }
+    
+    .timer-block:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+
+    .timer-val {
+      font-family: 'Outfit', sans-serif;
+      font-size: 24px;
+      font-weight: 800;
+      line-height: 1;
+      margin-bottom: 4px;
+      /* Color changing animation */
+      background: linear-gradient(90deg, #ff0000, #ffff00, #00ff00, #00ffff, #0000ff, #ff00ff, #ff0000);
+      background-size: 400% 100%;
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      animation: rainbowText 3s linear infinite;
+    }
+
+    .timer-label {
+      font-size: 10px;
+      color: var(--fg-muted);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      font-weight: 600;
+    }
+
+    @keyframes rainbowText {
+      0% { background-position: 100% 0; }
+      100% { background-position: 0% 0; }
+    }
+
     /* === Stats Cards === */
     .stats-row {
       display: grid;
@@ -1386,6 +1483,16 @@
       .greeting-section { padding: 16px 0 14px; }
       .greeting-text { font-size: 26px; }
 
+      .countdown-timer {
+        gap: 4px;
+      }
+      .timer-val {
+        font-size: 18px;
+      }
+      .timer-label {
+        font-size: 8px;
+      }
+
       .stats-row { gap: 8px; }
       .stat-card { padding: 14px 10px; }
       .stat-number { font-size: 24px; }
@@ -1419,6 +1526,8 @@
     @media (max-width: 380px) {
       .app-shell { padding: 0 10px; padding-bottom: calc(90px + var(--safe-bottom)); }
       .greeting-text { font-size: 22px; }
+      .countdown-section { padding: 15px 10px; }
+      .timer-val { font-size: 16px; }
       .stats-row { grid-template-columns: repeat(3, 1fr); gap: 6px; }
       .stat-card { padding: 12px 8px; }
       .stat-number { font-size: 22px; }
@@ -1523,6 +1632,32 @@
       </h2>
       <p class="greeting-sub">You have <span class="date-highlight" id="taskSummary">no tasks</span> for this day.</p>
     </section>
+
+    <!-- COUNTDOWN SECTION (Added Here) -->
+    <section class="countdown-section" id="countdownSection">
+      <div class="countdown-title">
+        <i class="fas fa-stopwatch"></i> Countdown to 1 May 2027
+      </div>
+      <div class="countdown-timer">
+        <div class="timer-block">
+          <span class="timer-val" id="cd-days">00</span>
+          <span class="timer-label">Days</span>
+        </div>
+        <div class="timer-block">
+          <span class="timer-val" id="cd-hours">00</span>
+          <span class="timer-label">Hours</span>
+        </div>
+        <div class="timer-block">
+          <span class="timer-val" id="cd-minutes">00</span>
+          <span class="timer-label">Mins</span>
+        </div>
+        <div class="timer-block">
+          <span class="timer-val" id="cd-seconds">00</span>
+          <span class="timer-label">Secs</span>
+        </div>
+      </div>
+    </section>
+    <!-- END COUNTDOWN SECTION -->
 
     <!-- Stats -->
     <section class="stats-row" aria-label="Task statistics">
@@ -1748,6 +1883,47 @@
     const greetingText = $('#greetingText');
     const taskSummary = $('#taskSummary');
     const currentDateDisplay = $('#currentDateDisplay');
+
+    // === NEW: Countdown Logic ===
+    function startCountdown() {
+        // Target Date: May 1, 2027 00:00:00
+        const targetDate = new Date('May 1, 2027 00:00:00').getTime();
+
+        const daysEl = $('#cd-days');
+        const hoursEl = $('#cd-hours');
+        const minsEl = $('#cd-minutes');
+        const secsEl = $('#cd-seconds');
+
+        function updateTimer() {
+            const now = new Date().getTime();
+            const distance = targetDate - now;
+
+            if (distance < 0) {
+                // If date passed
+                daysEl.innerText = "00";
+                hoursEl.innerText = "00";
+                minsEl.innerText = "00";
+                secsEl.innerText = "00";
+                return;
+            }
+
+            // Calculations
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Update DOM with leading zeros
+            daysEl.innerText = String(days).padStart(2, '0');
+            hoursEl.innerText = String(hours).padStart(2, '0');
+            minsEl.innerText = String(minutes).padStart(2, '0');
+            secsEl.innerText = String(seconds).padStart(2, '0');
+        }
+
+        // Update immediately then every second
+        updateTimer();
+        setInterval(updateTimer, 1000);
+    }
 
     // === Initialize Greeting based on actual current time (not selected date) ===
     function initGreeting() {
@@ -2219,6 +2395,7 @@
 
     // === Init ===
     initGreeting();
+    startCountdown(); // Start the countdown
     currentDateDisplay.textContent = formatDisplayDate(currentDateKey);
     $('#nextDayBtn').disabled = true; // Start on today, can't go forward
     renderTasks();
